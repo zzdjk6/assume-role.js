@@ -2,6 +2,10 @@
 
 Assume role cli tool implemented in node.js
 
+## Requirement
+
+Node.js 16.x
+
 ## Run
 
 This tool assumes that you have done basic configuration of your AWS account by doing `aws configure` already.

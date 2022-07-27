@@ -24,6 +24,8 @@ node bin/assume-role.js --role="arn:aws:iam::123456789:role/developer" --token="
 
 Note: `--role` and `--token` is optional, if you don't provide them, the CLI will ask for input.
 
+Note: `--command` is also optional, if you don't provide a command, the tool will export the session info of the assumed role.
+
 You can also run the development version:
 
 ```shell

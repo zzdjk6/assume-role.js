@@ -5847,10 +5847,10 @@ var require_string = __commonJS({
       return typeof input === "string";
     }
     exports.isString = isString;
-    function isEmpty(input) {
+    function isEmpty2(input) {
       return input === "";
     }
-    exports.isEmpty = isEmpty;
+    exports.isEmpty = isEmpty2;
   }
 });
 
@@ -18047,7 +18047,7 @@ var require_lexer = __commonJS({
   "node_modules/yaml/dist/parse/lexer.js"(exports) {
     "use strict";
     var cst = require_cst();
-    function isEmpty(ch) {
+    function isEmpty2(ch) {
       switch (ch) {
         case void 0:
         case " ":
@@ -18117,7 +18117,7 @@ var require_lexer = __commonJS({
         }
         if (ch === "-" || ch === ".") {
           const dt = this.buffer.substr(offset, 3);
-          if ((dt === "---" || dt === "...") && isEmpty(this.buffer[offset + 3]))
+          if ((dt === "---" || dt === "...") && isEmpty2(this.buffer[offset + 3]))
             return -1;
         }
         return offset;
@@ -18212,18 +18212,18 @@ var require_lexer = __commonJS({
           if (!this.atEnd && !this.hasChars(4))
             return this.setNext("line-start");
           const s2 = this.peek(3);
-          if (s2 === "---" && isEmpty(this.charAt(3))) {
+          if (s2 === "---" && isEmpty2(this.charAt(3))) {
             yield* this.pushCount(3);
             this.indentValue = 0;
             this.indentNext = 0;
             return "doc";
-          } else if (s2 === "..." && isEmpty(this.charAt(3))) {
+          } else if (s2 === "..." && isEmpty2(this.charAt(3))) {
             yield* this.pushCount(3);
             return "stream";
           }
         }
         this.indentValue = yield* this.pushSpaces(false);
-        if (this.indentNext > this.indentValue && !isEmpty(this.charAt(1)))
+        if (this.indentNext > this.indentValue && !isEmpty2(this.charAt(1)))
           this.indentNext = this.indentValue;
         return yield* this.parseBlockStart();
       }
@@ -18231,7 +18231,7 @@ var require_lexer = __commonJS({
         const [ch0, ch1] = this.peek(2);
         if (!ch1 && !this.atEnd)
           return this.setNext("block-start");
-        if ((ch0 === "-" || ch0 === "?" || ch0 === ":") && isEmpty(ch1)) {
+        if ((ch0 === "-" || ch0 === "?" || ch0 === ":") && isEmpty2(ch1)) {
           const n = (yield* this.pushCount(1)) + (yield* this.pushSpaces(true));
           this.indentNext = this.indentValue + 1;
           this.indentValue += n;
@@ -18294,7 +18294,7 @@ var require_lexer = __commonJS({
         const line = this.getLine();
         if (line === null)
           return this.setNext("flow");
-        if (indent !== -1 && indent < this.indentNext && line[0] !== "#" || indent === 0 && (line.startsWith("---") || line.startsWith("...")) && isEmpty(line[3])) {
+        if (indent !== -1 && indent < this.indentNext && line[0] !== "#" || indent === 0 && (line.startsWith("---") || line.startsWith("...")) && isEmpty2(line[3])) {
           const atFlowEndMarker = indent === this.indentNext - 1 && this.flowLevel === 1 && (line[0] === "]" || line[0] === "}");
           if (!atFlowEndMarker) {
             this.flowLevel = 0;
@@ -18336,7 +18336,7 @@ var require_lexer = __commonJS({
             return yield* this.parseQuotedScalar();
           case ":": {
             const next = this.charAt(1);
-            if (this.flowKey || isEmpty(next) || next === ",") {
+            if (this.flowKey || isEmpty2(next) || next === ",") {
               this.flowKey = false;
               yield* this.pushCount(1);
               yield* this.pushSpaces(true);
@@ -18398,7 +18398,7 @@ var require_lexer = __commonJS({
           else if (ch !== "-")
             break;
         }
-        return yield* this.pushUntil((ch) => isEmpty(ch) || ch === "#");
+        return yield* this.pushUntil((ch) => isEmpty2(ch) || ch === "#");
       }
       *parseBlockScalar() {
         let nl = this.pos - 1;
@@ -18471,10 +18471,10 @@ var require_lexer = __commonJS({
         while (ch = this.buffer[++i2]) {
           if (ch === ":") {
             const next = this.buffer[i2 + 1];
-            if (isEmpty(next) || inFlow && next === ",")
+            if (isEmpty2(next) || inFlow && next === ",")
               break;
             end = i2;
-          } else if (isEmpty(ch)) {
+          } else if (isEmpty2(ch)) {
             let next = this.buffer[i2 + 1];
             if (ch === "\r") {
               if (next === "\n") {
@@ -18533,7 +18533,7 @@ var require_lexer = __commonJS({
           case ":": {
             const inFlow = this.flowLevel > 0;
             const ch1 = this.charAt(1);
-            if (isEmpty(ch1) || inFlow && invalidFlowScalarChars.includes(ch1)) {
+            if (isEmpty2(ch1) || inFlow && invalidFlowScalarChars.includes(ch1)) {
               if (!inFlow)
                 this.indentNext = this.indentValue + 1;
               else if (this.flowKey)
@@ -18548,7 +18548,7 @@ var require_lexer = __commonJS({
         if (this.charAt(1) === "<") {
           let i2 = this.pos + 2;
           let ch = this.buffer[i2];
-          while (!isEmpty(ch) && ch !== ">")
+          while (!isEmpty2(ch) && ch !== ">")
             ch = this.buffer[++i2];
           return yield* this.pushToIndex(ch === ">" ? i2 + 1 : i2, false);
         } else {
@@ -22342,6 +22342,46 @@ var require_isEqual = __commonJS({
   }
 });
 
+// node_modules/lodash/isEmpty.js
+var require_isEmpty = __commonJS({
+  "node_modules/lodash/isEmpty.js"(exports, module2) {
+    var baseKeys = require_baseKeys();
+    var getTag = require_getTag();
+    var isArguments = require_isArguments();
+    var isArray = require_isArray();
+    var isArrayLike = require_isArrayLike();
+    var isBuffer = require_isBuffer();
+    var isPrototype = require_isPrototype();
+    var isTypedArray = require_isTypedArray();
+    var mapTag = "[object Map]";
+    var setTag = "[object Set]";
+    var objectProto = Object.prototype;
+    var hasOwnProperty = objectProto.hasOwnProperty;
+    function isEmpty2(value) {
+      if (value == null) {
+        return true;
+      }
+      if (isArrayLike(value) && (isArray(value) || typeof value == "string" || typeof value.splice == "function" || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+        return !value.length;
+      }
+      var tag = getTag(value);
+      if (tag == mapTag || tag == setTag) {
+        return !value.size;
+      }
+      if (isPrototype(value)) {
+        return !baseKeys(value).length;
+      }
+      for (var key in value) {
+        if (hasOwnProperty.call(value, key)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    module2.exports = isEmpty2;
+  }
+});
+
 // node_modules/zx/src/index.mjs
 var import_fs_extra = __toESM(require_lib(), 1);
 
@@ -24585,6 +24625,7 @@ registerGlobals();
 var import_toInteger = __toESM(require_toInteger());
 var import_get = __toESM(require_get());
 var import_isEqual = __toESM(require_isEqual());
+var import_isEmpty = __toESM(require_isEmpty());
 var import_child_process2 = require("child_process");
 $.verbose = false;
 var main = async () => {
@@ -24596,7 +24637,16 @@ var main = async () => {
   const mfaArn = await getVirtualMfaDevice(userId);
   await createSecureSession(mfaArn, token);
   await assumeRole(roleArn);
-  (0, import_child_process2.execSync)(command, { stdio: "inherit" });
+  if (!(0, import_isEmpty.default)(command)) {
+    (0, import_child_process2.execSync)(command, { stdio: "inherit" });
+  } else {
+    printSessionInfo();
+  }
+};
+var printSessionInfo = () => {
+  console.log(`AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`);
+  console.log(`AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`);
+  console.log(`AWS_SESSION_TOKEN=${process.env.AWS_SESSION_TOKEN}`);
 };
 var assumeRole = async (_roleArn) => {
   const roleArn = _roleArn || await question("What is your role arn? ");

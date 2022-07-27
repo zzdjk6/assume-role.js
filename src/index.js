@@ -2,6 +2,7 @@ import "zx/globals";
 import toInteger from "lodash/toInteger";
 import get from "lodash/get";
 import isEqual from "lodash/isEqual";
+import isEmpty from "lodash/isEmpty";
 import { execSync } from "child_process";
 
 $.verbose = false;
@@ -17,7 +18,17 @@ const main = async () => {
   await createSecureSession(mfaArn, token);
   await assumeRole(roleArn);
 
-  execSync(command, { stdio: "inherit" });
+  if (!isEmpty(command)) {
+    execSync(command, { stdio: "inherit" });
+  } else {
+    printSessionInfo();
+  }
+};
+
+const printSessionInfo = () => {
+  console.log(`AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`);
+  console.log(`AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`);
+  console.log(`AWS_SESSION_TOKEN=${process.env.AWS_SESSION_TOKEN}`);
 };
 
 const assumeRole = async (_roleArn) => {

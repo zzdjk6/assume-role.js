@@ -2,24 +2,34 @@
   "name": "assume-role.js",
   "version": "1.0.0",
   "description": "Assume role cli tool implemented in node.js",
-  "main": "src/index.js",
+  "main": "src/main.ts",
   "repository": "git@github.com:zzdjk6/assume-role.js.git",
   "author": "Thor Chen <zzdjk6@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/readline-sync": "^1.4.4",
+    "commander": "^9.5.0",
     "lodash": "^4.17.21",
+    "readline-sync": "^1.4.10",
+    "yargs": "^17.6.2",
     "zx": "^6.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
+    "@types/yargs": "^17.0.19",
     "esbuild": "^0.14.39",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "tsx": "^3.12.1",
+    "typescript": "^4.9.4"
   },
   "prettier": {
     "printWidth": 120
   },
   "scripts": {
-    "build": "esbuild src/index.js --bundle --platform=node --target=node16 --outfile=bin/assume-role.js",
-    "exec": "node bin/assume-role.js",
-    "preexec": "yarn run build"
+    "build": "esbuild src/main.ts --bundle --platform=node --target=node16 --outfile=bin/assume-role.js --banner:js='#!/usr/bin/env node'",
+    "start": "tsx src/main.ts"
+  },
+  "bin": {
+    "assume-role-js": "bin/assume-role.js"
   }
 }

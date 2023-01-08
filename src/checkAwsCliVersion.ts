@@ -2,7 +2,7 @@ import { logInfo } from "./logInfo";
 import { execSync } from "child_process";
 import toInteger from "lodash/toInteger";
 
-export const checkAwsCliVersion = async () => {
+export const checkAwsCliVersion = () => {
   logInfo("Checking AWS CLI version...");
 
   const str = execSync(`aws --version`, { encoding: "utf-8" });

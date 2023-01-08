@@ -1264,11 +1264,11 @@ var require_baseGet = __commonJS({
 var require_get = __commonJS({
   "node_modules/lodash/get.js"(exports, module2) {
     var baseGet = require_baseGet();
-    function get6(object, path, defaultValue) {
+    function get7(object, path, defaultValue) {
       var result = object == null ? void 0 : baseGet(object, path);
       return result === void 0 ? defaultValue : result;
     }
-    module2.exports = get6;
+    module2.exports = get7;
   }
 });
 
@@ -3510,10 +3510,10 @@ var require_ansi_styles = __commonJS({
     };
     var ansi2ansi = (n) => n;
     var rgb2rgb = (r, g, b) => [r, g, b];
-    var setLazyProperty = (object, property, get6) => {
+    var setLazyProperty = (object, property, get7) => {
       Object.defineProperty(object, property, {
         get: () => {
-          const value = get6();
+          const value = get7();
           Object.defineProperty(object, property, {
             value,
             enumerable: true,
@@ -7607,15 +7607,225 @@ var require_readline_sync = __commonJS({
   }
 });
 
+// node_modules/lodash/_baseSlice.js
+var require_baseSlice = __commonJS({
+  "node_modules/lodash/_baseSlice.js"(exports, module2) {
+    function baseSlice(array, start, end) {
+      var index = -1, length = array.length;
+      if (start < 0) {
+        start = -start > length ? 0 : length + start;
+      }
+      end = end > length ? length : end;
+      if (end < 0) {
+        end += length;
+      }
+      length = start > end ? 0 : end - start >>> 0;
+      start >>>= 0;
+      var result = Array(length);
+      while (++index < length) {
+        result[index] = array[index + start];
+      }
+      return result;
+    }
+    module2.exports = baseSlice;
+  }
+});
+
+// node_modules/lodash/_castSlice.js
+var require_castSlice = __commonJS({
+  "node_modules/lodash/_castSlice.js"(exports, module2) {
+    var baseSlice = require_baseSlice();
+    function castSlice(array, start, end) {
+      var length = array.length;
+      end = end === void 0 ? length : end;
+      return !start && end >= length ? array : baseSlice(array, start, end);
+    }
+    module2.exports = castSlice;
+  }
+});
+
+// node_modules/lodash/_baseFindIndex.js
+var require_baseFindIndex = __commonJS({
+  "node_modules/lodash/_baseFindIndex.js"(exports, module2) {
+    function baseFindIndex(array, predicate, fromIndex, fromRight) {
+      var length = array.length, index = fromIndex + (fromRight ? 1 : -1);
+      while (fromRight ? index-- : ++index < length) {
+        if (predicate(array[index], index, array)) {
+          return index;
+        }
+      }
+      return -1;
+    }
+    module2.exports = baseFindIndex;
+  }
+});
+
+// node_modules/lodash/_baseIsNaN.js
+var require_baseIsNaN = __commonJS({
+  "node_modules/lodash/_baseIsNaN.js"(exports, module2) {
+    function baseIsNaN(value) {
+      return value !== value;
+    }
+    module2.exports = baseIsNaN;
+  }
+});
+
+// node_modules/lodash/_strictIndexOf.js
+var require_strictIndexOf = __commonJS({
+  "node_modules/lodash/_strictIndexOf.js"(exports, module2) {
+    function strictIndexOf(array, value, fromIndex) {
+      var index = fromIndex - 1, length = array.length;
+      while (++index < length) {
+        if (array[index] === value) {
+          return index;
+        }
+      }
+      return -1;
+    }
+    module2.exports = strictIndexOf;
+  }
+});
+
+// node_modules/lodash/_baseIndexOf.js
+var require_baseIndexOf = __commonJS({
+  "node_modules/lodash/_baseIndexOf.js"(exports, module2) {
+    var baseFindIndex = require_baseFindIndex();
+    var baseIsNaN = require_baseIsNaN();
+    var strictIndexOf = require_strictIndexOf();
+    function baseIndexOf(array, value, fromIndex) {
+      return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
+    }
+    module2.exports = baseIndexOf;
+  }
+});
+
+// node_modules/lodash/_charsEndIndex.js
+var require_charsEndIndex = __commonJS({
+  "node_modules/lodash/_charsEndIndex.js"(exports, module2) {
+    var baseIndexOf = require_baseIndexOf();
+    function charsEndIndex(strSymbols, chrSymbols) {
+      var index = strSymbols.length;
+      while (index-- && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+      }
+      return index;
+    }
+    module2.exports = charsEndIndex;
+  }
+});
+
+// node_modules/lodash/_charsStartIndex.js
+var require_charsStartIndex = __commonJS({
+  "node_modules/lodash/_charsStartIndex.js"(exports, module2) {
+    var baseIndexOf = require_baseIndexOf();
+    function charsStartIndex(strSymbols, chrSymbols) {
+      var index = -1, length = strSymbols.length;
+      while (++index < length && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+      }
+      return index;
+    }
+    module2.exports = charsStartIndex;
+  }
+});
+
+// node_modules/lodash/_asciiToArray.js
+var require_asciiToArray = __commonJS({
+  "node_modules/lodash/_asciiToArray.js"(exports, module2) {
+    function asciiToArray(string) {
+      return string.split("");
+    }
+    module2.exports = asciiToArray;
+  }
+});
+
+// node_modules/lodash/_hasUnicode.js
+var require_hasUnicode = __commonJS({
+  "node_modules/lodash/_hasUnicode.js"(exports, module2) {
+    var rsAstralRange = "\\ud800-\\udfff";
+    var rsComboMarksRange = "\\u0300-\\u036f";
+    var reComboHalfMarksRange = "\\ufe20-\\ufe2f";
+    var rsComboSymbolsRange = "\\u20d0-\\u20ff";
+    var rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange;
+    var rsVarRange = "\\ufe0e\\ufe0f";
+    var rsZWJ = "\\u200d";
+    var reHasUnicode = RegExp("[" + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + "]");
+    function hasUnicode(string) {
+      return reHasUnicode.test(string);
+    }
+    module2.exports = hasUnicode;
+  }
+});
+
+// node_modules/lodash/_unicodeToArray.js
+var require_unicodeToArray = __commonJS({
+  "node_modules/lodash/_unicodeToArray.js"(exports, module2) {
+    var rsAstralRange = "\\ud800-\\udfff";
+    var rsComboMarksRange = "\\u0300-\\u036f";
+    var reComboHalfMarksRange = "\\ufe20-\\ufe2f";
+    var rsComboSymbolsRange = "\\u20d0-\\u20ff";
+    var rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange;
+    var rsVarRange = "\\ufe0e\\ufe0f";
+    var rsAstral = "[" + rsAstralRange + "]";
+    var rsCombo = "[" + rsComboRange + "]";
+    var rsFitz = "\\ud83c[\\udffb-\\udfff]";
+    var rsModifier = "(?:" + rsCombo + "|" + rsFitz + ")";
+    var rsNonAstral = "[^" + rsAstralRange + "]";
+    var rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}";
+    var rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+    var rsZWJ = "\\u200d";
+    var reOptMod = rsModifier + "?";
+    var rsOptVar = "[" + rsVarRange + "]?";
+    var rsOptJoin = "(?:" + rsZWJ + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*";
+    var rsSeq = rsOptVar + reOptMod + rsOptJoin;
+    var rsSymbol = "(?:" + [rsNonAstral + rsCombo + "?", rsCombo, rsRegional, rsSurrPair, rsAstral].join("|") + ")";
+    var reUnicode = RegExp(rsFitz + "(?=" + rsFitz + ")|" + rsSymbol + rsSeq, "g");
+    function unicodeToArray(string) {
+      return string.match(reUnicode) || [];
+    }
+    module2.exports = unicodeToArray;
+  }
+});
+
+// node_modules/lodash/_stringToArray.js
+var require_stringToArray = __commonJS({
+  "node_modules/lodash/_stringToArray.js"(exports, module2) {
+    var asciiToArray = require_asciiToArray();
+    var hasUnicode = require_hasUnicode();
+    var unicodeToArray = require_unicodeToArray();
+    function stringToArray(string) {
+      return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
+    }
+    module2.exports = stringToArray;
+  }
+});
+
+// node_modules/lodash/trim.js
+var require_trim = __commonJS({
+  "node_modules/lodash/trim.js"(exports, module2) {
+    var baseToString = require_baseToString();
+    var baseTrim = require_baseTrim();
+    var castSlice = require_castSlice();
+    var charsEndIndex = require_charsEndIndex();
+    var charsStartIndex = require_charsStartIndex();
+    var stringToArray = require_stringToArray();
+    var toString2 = require_toString();
+    function trim2(string, chars, guard) {
+      string = toString2(string);
+      if (string && (guard || chars === void 0)) {
+        return baseTrim(string);
+      }
+      if (!string || !(chars = baseToString(chars))) {
+        return string;
+      }
+      var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
+      return castSlice(strSymbols, start, end).join("");
+    }
+    module2.exports = trim2;
+  }
+});
+
 // src/main.ts
 var import_isEmpty = __toESM(require_isEmpty());
-var import_child_process6 = require("child_process");
-
-// src/logError.ts
-var logError = (...messages) => {
-  const datetime = new Date().toISOString();
-  console.error(`[assume-role.js] ${datetime}: `, ...messages);
-};
+var import_child_process8 = require("child_process");
 
 // src/logInfo.ts
 var logInfo = (...messages) => {
@@ -7626,7 +7836,7 @@ var logInfo = (...messages) => {
 // src/checkAwsCliVersion.ts
 var import_child_process = require("child_process");
 var import_toInteger = __toESM(require_toInteger());
-var checkAwsCliVersion = async () => {
+var checkAwsCliVersion = () => {
   var _a2;
   logInfo("Checking AWS CLI version...");
   const str = (0, import_child_process.execSync)(`aws --version`, { encoding: "utf-8" });
@@ -9241,6 +9451,11 @@ var parseCliArgs = () => {
   };
 };
 
+// src/getVirtualMfaDevice.ts
+var import_child_process3 = require("child_process");
+var import_get3 = __toESM(require_get());
+var import_isEqual = __toESM(require_isEqual());
+
 // src/getUserId.ts
 var import_child_process2 = require("child_process");
 var import_get2 = __toESM(require_get());
@@ -9254,11 +9469,9 @@ var getUserId = () => {
 };
 
 // src/getVirtualMfaDevice.ts
-var import_child_process3 = require("child_process");
-var import_get3 = __toESM(require_get());
-var import_isEqual = __toESM(require_isEqual());
-var getVirtualMfaDevice = (userId) => {
+var getVirtualMfaDevice = () => {
   logInfo("Getting virtual MFA device...");
+  const userId = getUserId();
   const output = (0, import_child_process3.execSync)(`aws iam list-virtual-mfa-devices --no-paginate`, { encoding: "utf-8" });
   const json = JSON.parse(output);
   const arr = (0, import_get3.default)(json, "VirtualMFADevices");
@@ -9273,6 +9486,9 @@ var getVirtualMfaDevice = (userId) => {
     throw new Error(`No virtual MFA device found for user ${userId}`);
   }
   const mfaArn = (0, import_get3.default)(data, "SerialNumber");
+  if (!mfaArn) {
+    throw new Error("No virtual MFA device found");
+  }
   logInfo("Virtual MFA device found: ", mfaArn);
   return mfaArn;
 };
@@ -9311,7 +9527,7 @@ var printSessionInfo = () => {
 // src/assumeRole.ts
 var import_get5 = __toESM(require_get());
 var import_child_process5 = require("child_process");
-var assumeRole = async (roleArn) => {
+var assumeRole = (roleArn) => {
   const timestamp = new Date().getTime();
   const output = (0, import_child_process5.execSync)(`aws sts assume-role --role-arn ${roleArn} --role-session-name assume-role-js-${timestamp}`, {
     encoding: "utf-8"
@@ -9324,27 +9540,119 @@ var assumeRole = async (roleArn) => {
   if (!accessKeyId || !secretAccessKey || !sessionToken) {
     throw new Error("Assume role failed");
   }
-  process.env.AWS_ACCESS_KEY_ID = accessKeyId;
-  process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
-  process.env.AWS_SESSION_TOKEN = sessionToken;
   logInfo("Role assumed, expiration: ", expiration);
+  return {
+    accessKeyId,
+    secretAccessKey,
+    sessionToken,
+    expiration
+  };
+};
+
+// src/getProfile.ts
+var import_get6 = __toESM(require_get());
+var getProfile = (roleArn) => {
+  const re = /arn:aws:iam::(\d+):role\/(.+)/;
+  const matches = re.exec(roleArn);
+  const accountId = (0, import_get6.default)(matches, "1");
+  const roleName = (0, import_get6.default)(matches, "2");
+  const profile = [accountId, roleName].join("-");
+  logInfo(`The AWS profile is ${profile}`);
+  return profile;
+};
+
+// src/getSavedInfoFromConfig.ts
+var import_child_process6 = require("child_process");
+var import_trim = __toESM(require_trim());
+var execSync6 = (command) => {
+  try {
+    return (0, import_child_process6.execSync)(command, { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
+  } catch (e) {
+    return "";
+  }
+};
+var getSavedInfoFromConfig = (profile) => {
+  const mfa_serial = (0, import_trim.default)(execSync6(`aws configure get mfa_serial --profile ${profile}`));
+  const role_arn = (0, import_trim.default)(execSync6(`aws configure get role_arn --profile ${profile}`));
+  const role_session_name = (0, import_trim.default)(execSync6(`aws configure get role_session_name --profile ${profile}`));
+  const expiration = (0, import_trim.default)(execSync6(`aws configure get expiration --profile ${profile}`));
+  const aws_access_key_id = (0, import_trim.default)(execSync6(`aws configure get aws_access_key_id --profile ${profile}`));
+  const aws_secret_access_key = (0, import_trim.default)(execSync6(`aws configure get aws_secret_access_key --profile ${profile}`));
+  const aws_session_token = (0, import_trim.default)(execSync6(`aws configure get aws_session_token --profile ${profile}`));
+  return {
+    mfa_serial,
+    role_arn,
+    role_session_name,
+    expiration,
+    aws_access_key_id,
+    aws_secret_access_key,
+    aws_session_token
+  };
+};
+
+// src/isExpired.ts
+var isExpired = (expiration) => {
+  if (!expiration) {
+    return true;
+  }
+  const exp = Date.parse(expiration);
+  const now = Date.now();
+  if (exp - now < 5 * 60 * 1e3) {
+    return true;
+  }
+  return false;
+};
+
+// src/saveInfoToConfig.ts
+var import_child_process7 = require("child_process");
+var saveInfoToConfig = (profile, info) => {
+  (0, import_child_process7.execSync)(`aws configure set mfa_serial ${info.mfa_serial} --profile ${profile}`, { encoding: "utf-8" });
+  (0, import_child_process7.execSync)(`aws configure set role_arn ${info.role_arn} --profile ${profile}`, { encoding: "utf-8" });
+  (0, import_child_process7.execSync)(`aws configure set role_session_name ${info.role_session_name} --profile ${profile}`, { encoding: "utf-8" });
+  (0, import_child_process7.execSync)(`aws configure set expiration ${info.expiration} --profile ${profile}`, { encoding: "utf-8" });
+  (0, import_child_process7.execSync)(`aws configure set aws_access_key_id ${info.aws_access_key_id} --profile ${profile}`, { encoding: "utf-8" });
+  (0, import_child_process7.execSync)(`aws configure set aws_secret_access_key ${info.aws_secret_access_key} --profile ${profile}`, {
+    encoding: "utf-8"
+  });
+  (0, import_child_process7.execSync)(`aws configure set aws_session_token ${info.aws_session_token} --profile ${profile}`, { encoding: "utf-8" });
+  logInfo("Configs are saved");
 };
 
 // src/main.ts
-var main = async () => {
+var main = () => {
   const { roleArn, command } = parseCliArgs();
-  await checkAwsCliVersion();
-  const userId = getUserId();
-  const mfaArn = getVirtualMfaDevice(userId);
-  await createSecureSession(mfaArn);
-  await assumeRole(roleArn);
+  checkAwsCliVersion();
+  const profile = getProfile(roleArn);
+  const info = getSavedInfoFromConfig(profile);
+  if (isExpired(info.expiration)) {
+    logInfo("Session expired");
+    const mfaArn = info.mfa_serial || getVirtualMfaDevice();
+    createSecureSession(mfaArn);
+    const { expiration, accessKeyId, secretAccessKey, sessionToken } = assumeRole(roleArn);
+    saveInfoToConfig(profile, {
+      expiration,
+      aws_access_key_id: accessKeyId,
+      aws_secret_access_key: secretAccessKey,
+      aws_session_token: sessionToken,
+      role_arn: roleArn,
+      mfa_serial: mfaArn,
+      role_session_name: profile
+    });
+    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
+    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+    process.env.AWS_SESSION_TOKEN = sessionToken;
+  } else {
+    process.env.AWS_ACCESS_KEY_ID = info.aws_access_key_id;
+    process.env.AWS_SECRET_ACCESS_KEY = info.aws_secret_access_key;
+    process.env.AWS_SESSION_TOKEN = info.aws_session_token;
+  }
   if (!(0, import_isEmpty.default)(command)) {
-    (0, import_child_process6.execSync)(command, { stdio: "inherit" });
+    (0, import_child_process8.execSync)(command, { stdio: "inherit" });
   } else {
     printSessionInfo();
   }
 };
-main().catch(logError);
+main();
 /**
  * @fileoverview Main entrypoint for libraries using yargs-parser in Node.js
  * CJS and ESM environments.

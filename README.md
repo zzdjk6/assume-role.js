@@ -1,6 +1,8 @@
 # assume-role.js
 
-Assume role cli tool implemented in node.js
+Assume role cli tool implemented in node.js.
+
+The goal is to replace https://github.com/uber/assume-role-cli, so the basic features and usages should be the same.
 
 ## Requirement
 
@@ -12,23 +14,27 @@ This tool assumes that you have done basic configuration of your AWS account by 
 
 That is, you should have your default AWS CLI profile and credentials set up already before going further.
 
-```shell
-node bin/assume-role.js --role="<YOUR_ROLE>" --token="<MFA_TOKEN>" --command="<YOUR COMMAND>"
-```
-
-e.g., 
+### Using development bundle
 
 ```shell
-node bin/assume-role.js --role="arn:aws:iam::123456789:role/developer" --token="123456" --command="aws s3 ls"
-```
-
-Note: `--role` and `--token` is optional, if you don't provide them, the CLI will ask for input.
-
-Note: `--command` is also optional, if you don't provide a command, the tool will export the session info of the assumed role.
-
-You can also run the development version:
-
-```shell
+# Build
 yarn
-yarn run exec --role="<YOUR_ROLE>" --token="<MFA_TOKEN>" --command="<YOUR COMMAND>"
+yarn build
+# Link executable so we can run `assume-role-js` from command line directly
+npm link
+# Run with command (e.g., list s3 buckets)
+assume-role-js --role arn:aws:iam::123456789:role/developer aws s3 ls
+# Run without commend (i.e., just output the credentials)
+assume-role-js --role arn:aws:iam::123456789:role/developer
+```
+
+### Using production bundle
+
+```shell
+# Install
+npm install -g assume-role-js
+# Run with command (e.g., list s3 buckets)
+assume-role-js --role arn:aws:iam::123456789:role/developer aws s3 ls
+# Run without commend (i.e., just output the credentials)
+assume-role-js --role arn:aws:iam::123456789:role/developer
 ```

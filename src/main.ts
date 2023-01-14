@@ -1,53 +1,64 @@
 import isEmpty from "lodash/isEmpty";
 import { execSync } from "child_process";
-import { logError } from "./logError";
-import { checkAwsCliVersion } from "./checkAwsCliVersion";
-import { parseCliArgs } from "./parseCliArgs";
-import { getVirtualMfaDevice } from "./getVirtualMfaDevice";
-import { createSecureSession } from "./createSecureSession";
-import { printSessionInfo } from "./printSessionInfo";
-import { assumeRole } from "./assumeRole";
-import { getProfile } from "./getProfile";
-import { getSavedInfoFromConfig } from "./getSavedInfoFromConfig";
-import { isExpired } from "./isExpired";
-import { saveInfoToConfig } from "./saveInfoToConfig";
-import { logInfo } from "./logInfo";
+import { checkAwsCliVersion } from "./functions/checkAwsCliVersion";
+import { parseCliArgs } from "./functions/parseCliArgs";
+import { getVirtualMfaArn } from "./functions/getVirtualMfaArn";
+import { createSecureSession } from "./functions/createSecureSession";
+import { printAwsEnvVars } from "./functions/printAwsEnvVars";
+import { assumeRole } from "./functions/assumeRole";
+import { getAwsProfileName } from "./functions/getAwsProfileName";
+import { getAwsProfileData } from "./functions/getAwsProfileData";
+import { isRoleSessionAlive } from "./functions/isRoleSessionAlive";
+import { updateAwsProfileData } from "./functions/updateAwsProfileData";
+import { logInfo } from "./functions/logInfo";
+import { getIamUser } from "./functions/getIamUser";
+import { updateAwsSessionEnv } from "./functions/updateAwsSessionEnv";
 
 const main = () => {
   const { roleArn, command } = parseCliArgs();
 
   checkAwsCliVersion();
-  const profile = getProfile(roleArn);
-  const info = getSavedInfoFromConfig(profile);
 
-  if (isExpired(info.expiration)) {
-    logInfo("Session expired");
-    const mfaArn = info.mfa_serial || getVirtualMfaDevice();
-    createSecureSession(mfaArn);
-    const { expiration, accessKeyId, secretAccessKey, sessionToken } = assumeRole(roleArn);
-    saveInfoToConfig(profile, {
-      expiration,
-      aws_access_key_id: accessKeyId,
-      aws_secret_access_key: secretAccessKey,
-      aws_session_token: sessionToken,
+  const profileName = getAwsProfileName(roleArn);
+
+  const profileData = getAwsProfileData(profileName);
+
+  if (isRoleSessionAlive(profileData.expiration)) {
+    logInfo("Session still alive");
+
+    updateAwsSessionEnv({
+      accessKeyId: profileData.aws_access_key_id,
+      secretAccessKey: profileData.aws_secret_access_key,
+      sessionToken: profileData.aws_session_token,
+    });
+  } else {
+    logInfo("Session not exist or expired");
+
+    const { userId, username } = getIamUser();
+
+    const mfaArn = getVirtualMfaArn(userId);
+
+    const secureSessionEnv = createSecureSession(mfaArn);
+    updateAwsSessionEnv(secureSessionEnv);
+
+    const roleSessionEnv = assumeRole({ roleArn, sessionName: username });
+    updateAwsSessionEnv(roleSessionEnv);
+
+    updateAwsProfileData(profileName, {
+      expiration: roleSessionEnv.expiration,
+      aws_access_key_id: roleSessionEnv.accessKeyId,
+      aws_secret_access_key: roleSessionEnv.secretAccessKey,
+      aws_session_token: roleSessionEnv.sessionToken,
       role_arn: roleArn,
       mfa_serial: mfaArn,
-      role_session_name: profile,
+      role_session_name: username,
     });
-
-    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
-    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
-    process.env.AWS_SESSION_TOKEN = sessionToken;
-  } else {
-    process.env.AWS_ACCESS_KEY_ID = info.aws_access_key_id;
-    process.env.AWS_SECRET_ACCESS_KEY = info.aws_secret_access_key;
-    process.env.AWS_SESSION_TOKEN = info.aws_session_token;
   }
 
   if (!isEmpty(command)) {
     execSync(command, { stdio: "inherit" });
   } else {
-    printSessionInfo();
+    printAwsEnvVars();
   }
 };
 

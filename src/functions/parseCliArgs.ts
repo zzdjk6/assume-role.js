@@ -4,6 +4,9 @@ import toString from "lodash/toString";
 import { hideBin } from "yargs/helpers";
 import yargs from "yargs/yargs";
 
+/**
+ * Parse CLI arguments
+ */
 export const parseCliArgs = () => {
   const argv = yargs(hideBin(process.argv))
     .version("1.0.0")

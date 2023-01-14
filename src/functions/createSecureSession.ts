@@ -3,6 +3,11 @@ import { question } from "readline-sync";
 import { execSync } from "child_process";
 import get from "lodash/get";
 
+/**
+ * Get system environment variables for a secure session to run role assume
+ *
+ * @param mfaArn
+ */
 export const createSecureSession = (mfaArn: string) => {
   logInfo("Creating secure session...");
 
@@ -20,9 +25,12 @@ export const createSecureSession = (mfaArn: string) => {
     throw new Error("Create secure session failed");
   }
 
-  process.env.AWS_ACCESS_KEY_ID = accessKeyId;
-  process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
-  process.env.AWS_SESSION_TOKEN = sessionToken;
+  logInfo("Secure session created");
 
-  logInfo("Secure session created, expiration: ", expiration);
+  return {
+    accessKeyId,
+    secretAccessKey,
+    sessionToken,
+    expiration,
+  };
 };

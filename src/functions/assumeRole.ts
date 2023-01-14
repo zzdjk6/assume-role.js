@@ -2,9 +2,19 @@ import get from "lodash/get";
 import { logInfo } from "./logInfo";
 import { execSync } from "child_process";
 
-export const assumeRole = (roleArn: string) => {
-  const timestamp = new Date().getTime();
-  const output = execSync(`aws sts assume-role --role-arn ${roleArn} --role-session-name assume-role-js-${timestamp}`, {
+type Args = {
+  roleArn: string;
+  sessionName: string;
+};
+
+/**
+ * Run role assume
+ *
+ * @param roleArn
+ */
+export const assumeRole = (args: Args) => {
+  const { roleArn, sessionName } = args;
+  const output = execSync(`aws sts assume-role --role-arn ${roleArn} --role-session-name ${sessionName}`, {
     encoding: "utf-8",
   });
   const json = JSON.parse(output);

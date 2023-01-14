@@ -3691,17 +3691,17 @@ var require_wrap_ansi = __commonJS({
     };
     var stringVisibleTrimSpacesRight = (string) => {
       const words = string.split(" ");
-      let last = words.length;
-      while (last > 0) {
-        if (stringWidth(words[last - 1]) > 0) {
+      let last2 = words.length;
+      while (last2 > 0) {
+        if (stringWidth(words[last2 - 1]) > 0) {
           break;
         }
-        last--;
+        last2--;
       }
-      if (last === words.length) {
+      if (last2 === words.length) {
         return string;
       }
-      return words.slice(0, last).join(" ") + words.slice(last).join("");
+      return words.slice(0, last2).join(" ") + words.slice(last2).join("");
     };
     var exec = (string, columns, options = {}) => {
       if (options.trim !== false && string.trim() === "") {
@@ -7808,7 +7808,7 @@ var require_trim = __commonJS({
     var charsStartIndex = require_charsStartIndex();
     var stringToArray = require_stringToArray();
     var toString2 = require_toString();
-    function trim2(string, chars, guard) {
+    function trim3(string, chars, guard) {
       string = toString2(string);
       if (string && (guard || chars === void 0)) {
         return baseTrim(string);
@@ -7819,7 +7819,96 @@ var require_trim = __commonJS({
       var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
       return castSlice(strSymbols, start, end).join("");
     }
-    module2.exports = trim2;
+    module2.exports = trim3;
+  }
+});
+
+// node_modules/lodash/_isIterateeCall.js
+var require_isIterateeCall = __commonJS({
+  "node_modules/lodash/_isIterateeCall.js"(exports, module2) {
+    var eq = require_eq();
+    var isArrayLike = require_isArrayLike();
+    var isIndex = require_isIndex();
+    var isObject = require_isObject();
+    function isIterateeCall(value, index, object) {
+      if (!isObject(object)) {
+        return false;
+      }
+      var type = typeof index;
+      if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
+        return eq(object[index], value);
+      }
+      return false;
+    }
+    module2.exports = isIterateeCall;
+  }
+});
+
+// node_modules/lodash/_baseIsRegExp.js
+var require_baseIsRegExp = __commonJS({
+  "node_modules/lodash/_baseIsRegExp.js"(exports, module2) {
+    var baseGetTag = require_baseGetTag();
+    var isObjectLike = require_isObjectLike();
+    var regexpTag = "[object RegExp]";
+    function baseIsRegExp(value) {
+      return isObjectLike(value) && baseGetTag(value) == regexpTag;
+    }
+    module2.exports = baseIsRegExp;
+  }
+});
+
+// node_modules/lodash/isRegExp.js
+var require_isRegExp = __commonJS({
+  "node_modules/lodash/isRegExp.js"(exports, module2) {
+    var baseIsRegExp = require_baseIsRegExp();
+    var baseUnary = require_baseUnary();
+    var nodeUtil = require_nodeUtil();
+    var nodeIsRegExp = nodeUtil && nodeUtil.isRegExp;
+    var isRegExp = nodeIsRegExp ? baseUnary(nodeIsRegExp) : baseIsRegExp;
+    module2.exports = isRegExp;
+  }
+});
+
+// node_modules/lodash/split.js
+var require_split = __commonJS({
+  "node_modules/lodash/split.js"(exports, module2) {
+    var baseToString = require_baseToString();
+    var castSlice = require_castSlice();
+    var hasUnicode = require_hasUnicode();
+    var isIterateeCall = require_isIterateeCall();
+    var isRegExp = require_isRegExp();
+    var stringToArray = require_stringToArray();
+    var toString2 = require_toString();
+    var MAX_ARRAY_LENGTH = 4294967295;
+    function split2(string, separator, limit) {
+      if (limit && typeof limit != "number" && isIterateeCall(string, separator, limit)) {
+        separator = limit = void 0;
+      }
+      limit = limit === void 0 ? MAX_ARRAY_LENGTH : limit >>> 0;
+      if (!limit) {
+        return [];
+      }
+      string = toString2(string);
+      if (string && (typeof separator == "string" || separator != null && !isRegExp(separator))) {
+        separator = baseToString(separator);
+        if (!separator && hasUnicode(string)) {
+          return castSlice(stringToArray(string), 0, limit);
+        }
+      }
+      return string.split(separator, limit);
+    }
+    module2.exports = split2;
+  }
+});
+
+// node_modules/lodash/last.js
+var require_last = __commonJS({
+  "node_modules/lodash/last.js"(exports, module2) {
+    function last2(array) {
+      var length = array == null ? 0 : array.length;
+      return length ? array[length - 1] : void 0;
+    }
+    module2.exports = last2;
   }
 });
 
@@ -7827,13 +7916,13 @@ var require_trim = __commonJS({
 var import_isEmpty = __toESM(require_isEmpty());
 var import_child_process8 = require("child_process");
 
-// src/logInfo.ts
+// src/functions/logInfo.ts
 var logInfo = (...messages) => {
   const datetime = new Date().toISOString();
   console.log(`[assume-role.js] ${datetime}: `, ...messages);
 };
 
-// src/checkAwsCliVersion.ts
+// src/functions/checkAwsCliVersion.ts
 var import_child_process = require("child_process");
 var import_toInteger = __toESM(require_toInteger());
 var checkAwsCliVersion = () => {
@@ -7848,7 +7937,7 @@ var checkAwsCliVersion = () => {
   logInfo("AWS CLI version: ", version);
 };
 
-// src/parseCliArgs.ts
+// src/functions/parseCliArgs.ts
 var import_get = __toESM(require_get());
 var import_join = __toESM(require_join());
 var import_toString = __toESM(require_toString());
@@ -9437,7 +9526,7 @@ Yargs.hideBin = processArgv.hideBin;
 Yargs.Parser = Parser2;
 var yargs_default = Yargs;
 
-// src/parseCliArgs.ts
+// src/functions/parseCliArgs.ts
 var parseCliArgs = () => {
   const argv = yargs_default(hideBin(process.argv)).version("1.0.0").option("role", {
     describe: "The role arn, e.g., arn:aws:iam::123456789:role/developer",
@@ -9451,41 +9540,26 @@ var parseCliArgs = () => {
   };
 };
 
-// src/getVirtualMfaDevice.ts
-var import_child_process3 = require("child_process");
-var import_get3 = __toESM(require_get());
-var import_isEqual = __toESM(require_isEqual());
-
-// src/getUserId.ts
+// src/functions/getVirtualMfaArn.ts
 var import_child_process2 = require("child_process");
 var import_get2 = __toESM(require_get());
-var getUserId = () => {
-  logInfo("Getting user id...");
-  const result = (0, import_child_process2.execSync)(`aws sts get-caller-identity`, { encoding: "utf-8" });
-  const json = JSON.parse(result);
-  const userId = (0, import_get2.default)(json, "UserId");
-  logInfo("User id: ", userId);
-  return userId;
-};
-
-// src/getVirtualMfaDevice.ts
-var getVirtualMfaDevice = () => {
+var import_isEqual = __toESM(require_isEqual());
+var getVirtualMfaArn = (userId) => {
   logInfo("Getting virtual MFA device...");
-  const userId = getUserId();
-  const output = (0, import_child_process3.execSync)(`aws iam list-virtual-mfa-devices --no-paginate`, { encoding: "utf-8" });
+  const output = (0, import_child_process2.execSync)(`aws iam list-virtual-mfa-devices --no-paginate`, { encoding: "utf-8" });
   const json = JSON.parse(output);
-  const arr = (0, import_get3.default)(json, "VirtualMFADevices");
+  const arr = (0, import_get2.default)(json, "VirtualMFADevices");
   if (!Array.isArray(arr)) {
     throw new Error("Fail to fetch virtual MFA devices");
   }
   const data = arr.find((item) => {
-    const itemUserId = (0, import_get3.default)(item, "User.UserId");
+    const itemUserId = (0, import_get2.default)(item, "User.UserId");
     return (0, import_isEqual.default)(itemUserId, userId);
   });
   if (!data) {
     throw new Error(`No virtual MFA device found for user ${userId}`);
   }
-  const mfaArn = (0, import_get3.default)(data, "SerialNumber");
+  const mfaArn = (0, import_get2.default)(data, "SerialNumber");
   if (!mfaArn) {
     throw new Error("No virtual MFA device found");
   }
@@ -9493,14 +9567,46 @@ var getVirtualMfaDevice = () => {
   return mfaArn;
 };
 
-// src/createSecureSession.ts
+// src/functions/createSecureSession.ts
 var import_readline_sync = __toESM(require_readline_sync());
-var import_child_process4 = require("child_process");
-var import_get4 = __toESM(require_get());
+var import_child_process3 = require("child_process");
+var import_get3 = __toESM(require_get());
 var createSecureSession = (mfaArn) => {
   logInfo("Creating secure session...");
   const tokenCode = (0, import_readline_sync.question)("What is your token code? ");
-  const output = (0, import_child_process4.execSync)(`aws sts get-session-token --serial-number ${mfaArn} --token-code ${tokenCode}`, {
+  const output = (0, import_child_process3.execSync)(`aws sts get-session-token --serial-number ${mfaArn} --token-code ${tokenCode}`, {
+    encoding: "utf-8"
+  });
+  const json = JSON.parse(output);
+  const accessKeyId = (0, import_get3.default)(json, "Credentials.AccessKeyId");
+  const secretAccessKey = (0, import_get3.default)(json, "Credentials.SecretAccessKey");
+  const sessionToken = (0, import_get3.default)(json, "Credentials.SessionToken");
+  const expiration = (0, import_get3.default)(json, "Credentials.Expiration");
+  if (!accessKeyId || !secretAccessKey || !sessionToken) {
+    throw new Error("Create secure session failed");
+  }
+  logInfo("Secure session created");
+  return {
+    accessKeyId,
+    secretAccessKey,
+    sessionToken,
+    expiration
+  };
+};
+
+// src/functions/printAwsEnvVars.ts
+var printAwsEnvVars = () => {
+  console.log(`AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`);
+  console.log(`AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`);
+  console.log(`AWS_SESSION_TOKEN=${process.env.AWS_SESSION_TOKEN}`);
+};
+
+// src/functions/assumeRole.ts
+var import_get4 = __toESM(require_get());
+var import_child_process4 = require("child_process");
+var assumeRole = (args) => {
+  const { roleArn, sessionName } = args;
+  const output = (0, import_child_process4.execSync)(`aws sts assume-role --role-arn ${roleArn} --role-session-name ${sessionName}`, {
     encoding: "utf-8"
   });
   const json = JSON.parse(output);
@@ -9508,35 +9614,6 @@ var createSecureSession = (mfaArn) => {
   const secretAccessKey = (0, import_get4.default)(json, "Credentials.SecretAccessKey");
   const sessionToken = (0, import_get4.default)(json, "Credentials.SessionToken");
   const expiration = (0, import_get4.default)(json, "Credentials.Expiration");
-  if (!accessKeyId || !secretAccessKey || !sessionToken) {
-    throw new Error("Create secure session failed");
-  }
-  process.env.AWS_ACCESS_KEY_ID = accessKeyId;
-  process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
-  process.env.AWS_SESSION_TOKEN = sessionToken;
-  logInfo("Secure session created, expiration: ", expiration);
-};
-
-// src/printSessionInfo.ts
-var printSessionInfo = () => {
-  console.log(`AWS_ACCESS_KEY_ID=${process.env.AWS_ACCESS_KEY_ID}`);
-  console.log(`AWS_SECRET_ACCESS_KEY=${process.env.AWS_SECRET_ACCESS_KEY}`);
-  console.log(`AWS_SESSION_TOKEN=${process.env.AWS_SESSION_TOKEN}`);
-};
-
-// src/assumeRole.ts
-var import_get5 = __toESM(require_get());
-var import_child_process5 = require("child_process");
-var assumeRole = (roleArn) => {
-  const timestamp = new Date().getTime();
-  const output = (0, import_child_process5.execSync)(`aws sts assume-role --role-arn ${roleArn} --role-session-name assume-role-js-${timestamp}`, {
-    encoding: "utf-8"
-  });
-  const json = JSON.parse(output);
-  const accessKeyId = (0, import_get5.default)(json, "Credentials.AccessKeyId");
-  const secretAccessKey = (0, import_get5.default)(json, "Credentials.SecretAccessKey");
-  const sessionToken = (0, import_get5.default)(json, "Credentials.SessionToken");
-  const expiration = (0, import_get5.default)(json, "Credentials.Expiration");
   if (!accessKeyId || !secretAccessKey || !sessionToken) {
     throw new Error("Assume role failed");
   }
@@ -9549,36 +9626,29 @@ var assumeRole = (roleArn) => {
   };
 };
 
-// src/getProfile.ts
-var import_get6 = __toESM(require_get());
-var getProfile = (roleArn) => {
+// src/functions/getAwsProfileName.ts
+var import_get5 = __toESM(require_get());
+var getAwsProfileName = (roleArn) => {
   const re = /arn:aws:iam::(\d+):role\/(.+)/;
   const matches = re.exec(roleArn);
-  const accountId = (0, import_get6.default)(matches, "1");
-  const roleName = (0, import_get6.default)(matches, "2");
+  const accountId = (0, import_get5.default)(matches, "1");
+  const roleName = (0, import_get5.default)(matches, "2");
   const profile = [accountId, roleName].join("-");
   logInfo(`The AWS profile is ${profile}`);
   return profile;
 };
 
-// src/getSavedInfoFromConfig.ts
-var import_child_process6 = require("child_process");
+// src/functions/getAwsProfileData.ts
+var import_child_process5 = require("child_process");
 var import_trim = __toESM(require_trim());
-var execSync6 = (command) => {
-  try {
-    return (0, import_child_process6.execSync)(command, { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
-  } catch (e) {
-    return "";
-  }
-};
-var getSavedInfoFromConfig = (profile) => {
-  const mfa_serial = (0, import_trim.default)(execSync6(`aws configure get mfa_serial --profile ${profile}`));
-  const role_arn = (0, import_trim.default)(execSync6(`aws configure get role_arn --profile ${profile}`));
-  const role_session_name = (0, import_trim.default)(execSync6(`aws configure get role_session_name --profile ${profile}`));
-  const expiration = (0, import_trim.default)(execSync6(`aws configure get expiration --profile ${profile}`));
-  const aws_access_key_id = (0, import_trim.default)(execSync6(`aws configure get aws_access_key_id --profile ${profile}`));
-  const aws_secret_access_key = (0, import_trim.default)(execSync6(`aws configure get aws_secret_access_key --profile ${profile}`));
-  const aws_session_token = (0, import_trim.default)(execSync6(`aws configure get aws_session_token --profile ${profile}`));
+var getAwsProfileData = (profileName) => {
+  const mfa_serial = (0, import_trim.default)(executeCommand(`aws configure get mfa_serial --profile ${profileName}`));
+  const role_arn = (0, import_trim.default)(executeCommand(`aws configure get role_arn --profile ${profileName}`));
+  const role_session_name = (0, import_trim.default)(executeCommand(`aws configure get role_session_name --profile ${profileName}`));
+  const expiration = (0, import_trim.default)(executeCommand(`aws configure get expiration --profile ${profileName}`));
+  const aws_access_key_id = (0, import_trim.default)(executeCommand(`aws configure get aws_access_key_id --profile ${profileName}`));
+  const aws_secret_access_key = (0, import_trim.default)(executeCommand(`aws configure get aws_secret_access_key --profile ${profileName}`));
+  const aws_session_token = (0, import_trim.default)(executeCommand(`aws configure get aws_session_token --profile ${profileName}`));
   return {
     mfa_serial,
     role_arn,
@@ -9589,67 +9659,117 @@ var getSavedInfoFromConfig = (profile) => {
     aws_session_token
   };
 };
-
-// src/isExpired.ts
-var isExpired = (expiration) => {
-  if (!expiration) {
-    return true;
+var executeCommand = (command) => {
+  try {
+    return (0, import_child_process5.execSync)(command, { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
+  } catch (e) {
+    return "";
   }
-  const exp = Date.parse(expiration);
-  const now = Date.now();
-  if (exp - now < 5 * 60 * 1e3) {
-    return true;
-  }
-  return false;
 };
 
-// src/saveInfoToConfig.ts
-var import_child_process7 = require("child_process");
-var saveInfoToConfig = (profile, info) => {
-  (0, import_child_process7.execSync)(`aws configure set mfa_serial ${info.mfa_serial} --profile ${profile}`, { encoding: "utf-8" });
-  (0, import_child_process7.execSync)(`aws configure set role_arn ${info.role_arn} --profile ${profile}`, { encoding: "utf-8" });
-  (0, import_child_process7.execSync)(`aws configure set role_session_name ${info.role_session_name} --profile ${profile}`, { encoding: "utf-8" });
-  (0, import_child_process7.execSync)(`aws configure set expiration ${info.expiration} --profile ${profile}`, { encoding: "utf-8" });
-  (0, import_child_process7.execSync)(`aws configure set aws_access_key_id ${info.aws_access_key_id} --profile ${profile}`, { encoding: "utf-8" });
-  (0, import_child_process7.execSync)(`aws configure set aws_secret_access_key ${info.aws_secret_access_key} --profile ${profile}`, {
+// src/functions/isRoleSessionAlive.ts
+var isRoleSessionAlive = (expiration) => {
+  if (!expiration) {
+    return false;
+  }
+  let exp;
+  try {
+    exp = Date.parse(expiration);
+  } catch (e) {
+    return false;
+  }
+  const now = Date.now();
+  if (exp - now < 5 * 60 * 1e3) {
+    return false;
+  }
+  return true;
+};
+
+// src/functions/updateAwsProfileData.ts
+var import_child_process6 = require("child_process");
+var updateAwsProfileData = (profileName, profileData) => {
+  (0, import_child_process6.execSync)(`aws configure set mfa_serial ${profileData.mfa_serial} --profile ${profileName}`, { encoding: "utf-8" });
+  (0, import_child_process6.execSync)(`aws configure set role_arn ${profileData.role_arn} --profile ${profileName}`, { encoding: "utf-8" });
+  (0, import_child_process6.execSync)(`aws configure set role_session_name ${profileData.role_session_name} --profile ${profileName}`, {
     encoding: "utf-8"
   });
-  (0, import_child_process7.execSync)(`aws configure set aws_session_token ${info.aws_session_token} --profile ${profile}`, { encoding: "utf-8" });
+  (0, import_child_process6.execSync)(`aws configure set expiration ${profileData.expiration} --profile ${profileName}`, { encoding: "utf-8" });
+  (0, import_child_process6.execSync)(`aws configure set aws_access_key_id ${profileData.aws_access_key_id} --profile ${profileName}`, {
+    encoding: "utf-8"
+  });
+  (0, import_child_process6.execSync)(`aws configure set aws_secret_access_key ${profileData.aws_secret_access_key} --profile ${profileName}`, {
+    encoding: "utf-8"
+  });
+  (0, import_child_process6.execSync)(`aws configure set aws_session_token ${profileData.aws_session_token} --profile ${profileName}`, {
+    encoding: "utf-8"
+  });
   logInfo("Configs are saved");
+};
+
+// src/functions/getIamUser.ts
+var import_child_process7 = require("child_process");
+var import_get6 = __toESM(require_get());
+var import_trim2 = __toESM(require_trim());
+var import_split = __toESM(require_split());
+var import_last = __toESM(require_last());
+var getIamUser = () => {
+  logInfo("Getting user id...");
+  const result = (0, import_child_process7.execSync)(`aws sts get-caller-identity`, { encoding: "utf-8" });
+  const json = JSON.parse(result);
+  const userId = (0, import_get6.default)(json, "UserId");
+  logInfo("User id: ", userId);
+  const arn = (0, import_trim2.default)((0, import_get6.default)(json, "Arn"));
+  const username = (0, import_trim2.default)((0, import_last.default)((0, import_split.default)(arn, "/")));
+  logInfo("Username: ", username);
+  return {
+    userId,
+    username
+  };
+};
+
+// src/functions/updateAwsSessionEnv.ts
+var updateAwsSessionEnv = (args) => {
+  const { accessKeyId, secretAccessKey, sessionToken } = args;
+  process.env.AWS_ACCESS_KEY_ID = accessKeyId;
+  process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+  process.env.AWS_SESSION_TOKEN = sessionToken;
 };
 
 // src/main.ts
 var main = () => {
   const { roleArn, command } = parseCliArgs();
   checkAwsCliVersion();
-  const profile = getProfile(roleArn);
-  const info = getSavedInfoFromConfig(profile);
-  if (isExpired(info.expiration)) {
-    logInfo("Session expired");
-    const mfaArn = info.mfa_serial || getVirtualMfaDevice();
-    createSecureSession(mfaArn);
-    const { expiration, accessKeyId, secretAccessKey, sessionToken } = assumeRole(roleArn);
-    saveInfoToConfig(profile, {
-      expiration,
-      aws_access_key_id: accessKeyId,
-      aws_secret_access_key: secretAccessKey,
-      aws_session_token: sessionToken,
+  const profileName = getAwsProfileName(roleArn);
+  const profileData = getAwsProfileData(profileName);
+  if (isRoleSessionAlive(profileData.expiration)) {
+    logInfo("Session still alive");
+    updateAwsSessionEnv({
+      accessKeyId: profileData.aws_access_key_id,
+      secretAccessKey: profileData.aws_secret_access_key,
+      sessionToken: profileData.aws_session_token
+    });
+  } else {
+    logInfo("Session not exist or expired");
+    const { userId, username } = getIamUser();
+    const mfaArn = getVirtualMfaArn(userId);
+    const secureSessionEnv = createSecureSession(mfaArn);
+    updateAwsSessionEnv(secureSessionEnv);
+    const roleSessionEnv = assumeRole({ roleArn, sessionName: username });
+    updateAwsSessionEnv(roleSessionEnv);
+    updateAwsProfileData(profileName, {
+      expiration: roleSessionEnv.expiration,
+      aws_access_key_id: roleSessionEnv.accessKeyId,
+      aws_secret_access_key: roleSessionEnv.secretAccessKey,
+      aws_session_token: roleSessionEnv.sessionToken,
       role_arn: roleArn,
       mfa_serial: mfaArn,
-      role_session_name: profile
+      role_session_name: username
     });
-    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
-    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
-    process.env.AWS_SESSION_TOKEN = sessionToken;
-  } else {
-    process.env.AWS_ACCESS_KEY_ID = info.aws_access_key_id;
-    process.env.AWS_SECRET_ACCESS_KEY = info.aws_secret_access_key;
-    process.env.AWS_SESSION_TOKEN = info.aws_session_token;
   }
   if (!(0, import_isEmpty.default)(command)) {
     (0, import_child_process8.execSync)(command, { stdio: "inherit" });
   } else {
-    printSessionInfo();
+    printAwsEnvVars();
   }
 };
 main();

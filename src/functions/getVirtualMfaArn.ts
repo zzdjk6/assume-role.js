@@ -2,12 +2,15 @@ import { logInfo } from "./logInfo";
 import { execSync } from "child_process";
 import get from "lodash/get";
 import isEqual from "lodash/isEqual";
-import { getUserId } from "./getUserId";
 
-export const getVirtualMfaDevice = () => {
+/**
+ * Get ARN for virtual MFA device
+ * It automatically detects which MFA device to use
+ *
+ * @param userId
+ */
+export const getVirtualMfaArn = (userId: string) => {
   logInfo("Getting virtual MFA device...");
-
-  const userId = getUserId();
 
   const output = execSync(`aws iam list-virtual-mfa-devices --no-paginate`, { encoding: "utf-8" });
   const json = JSON.parse(output);

@@ -2,6 +2,11 @@ import { logInfo } from "./logInfo";
 import { execSync } from "child_process";
 import toInteger from "lodash/toInteger";
 
+/**
+ * Check AWS CLI version
+ *
+ * @throws Error when AWS CLI version is not v2
+ */
 export const checkAwsCliVersion = () => {
   logInfo("Checking AWS CLI version...");
 

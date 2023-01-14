@@ -117,3 +117,15 @@ yarn start --role arn:aws:iam::123456789:role/developer
 
 yarn start --role arn:aws:iam::123456789:role/developer aws s3 ls
 ```
+
+## Troubleshooting
+
+### Getting error of "cannot be loaded because running scripts is disabled on this system"
+
+This might happen when trying to run the script under PowerShell due to the execution policy.
+
+Solution:
+
+```shell
+powershell -ExecutionPolicy Bypass
+```

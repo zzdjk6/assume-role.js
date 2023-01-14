@@ -7,15 +7,13 @@
   "author": "Thor Chen <zzdjk6@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/readline-sync": "^1.4.4",
-    "commander": "^9.5.0",
     "lodash": "^4.17.21",
     "readline-sync": "^1.4.10",
-    "yargs": "^17.6.2",
-    "zx": "^6.1.0"
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
+    "@types/readline-sync": "^1.4.4",
     "@types/yargs": "^17.0.19",
     "esbuild": "^0.14.39",
     "prettier": "^2.6.2",

@@ -1,8 +1,8 @@
-# assume-role.js
+# assume-role-js
 
 A simple CLI tool to assume AWS IAM role, written in TypeScript.
 
-This project aims at a drop-in replacement of the most common and basic use cases of https://github.com/uber/assume-role-cli, which haven't been updated for years and people keep complaining about some critical issues (such as [not usable on windows](https://github.com/uber/assume-role-cli/issues/20)).
+This project aims at a drop-in replacement of the most common and basic use cases of https://github.com/uber/assume-role-cli, which has not been updated for years and people keep complaining about some critical issues (such as [not usable on windows](https://github.com/uber/assume-role-cli/issues/20)).
 
 ## System requirements
 

@@ -1,7 +1,7 @@
 {
-  "name": "assume-role.js",
+  "name": "assume-role-js",
   "version": "1.0.0",
-  "description": "Assume role cli tool implemented in node.js",
+  "description": "Command line tool to assume AWS IAM role, running on node.js",
   "main": "src/main.ts",
   "repository": "git@github.com:zzdjk6/assume-role.js.git",
   "author": "Thor Chen <zzdjk6@gmail.com>",

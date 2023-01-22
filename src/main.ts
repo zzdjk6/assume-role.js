@@ -56,6 +56,7 @@ const main = () => {
   }
 
   if (!isEmpty(command)) {
+    logInfo(`Executing command:`, command);
     execSync(command, { stdio: "inherit" });
   } else {
     printAwsEnvVars();

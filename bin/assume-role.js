@@ -5877,6 +5877,89 @@ ${t5.join("\n")}` : "";
   }
 });
 
+// node_modules/lodash/_baseSlice.js
+var require_baseSlice = __commonJS({
+  "node_modules/lodash/_baseSlice.js"(exports, module2) {
+    function baseSlice(array, start, end) {
+      var index = -1, length = array.length;
+      if (start < 0) {
+        start = -start > length ? 0 : length + start;
+      }
+      end = end > length ? length : end;
+      if (end < 0) {
+        end += length;
+      }
+      length = start > end ? 0 : end - start >>> 0;
+      start >>>= 0;
+      var result = Array(length);
+      while (++index < length) {
+        result[index] = array[index + start];
+      }
+      return result;
+    }
+    module2.exports = baseSlice;
+  }
+});
+
+// node_modules/lodash/_isIndex.js
+var require_isIndex = __commonJS({
+  "node_modules/lodash/_isIndex.js"(exports, module2) {
+    var MAX_SAFE_INTEGER = 9007199254740991;
+    var reIsUint = /^(?:0|[1-9]\d*)$/;
+    function isIndex(value, length) {
+      var type = typeof value;
+      length = length == null ? MAX_SAFE_INTEGER : length;
+      return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+    }
+    module2.exports = isIndex;
+  }
+});
+
+// node_modules/lodash/_isIterateeCall.js
+var require_isIterateeCall = __commonJS({
+  "node_modules/lodash/_isIterateeCall.js"(exports, module2) {
+    var eq = require_eq();
+    var isArrayLike = require_isArrayLike();
+    var isIndex = require_isIndex();
+    var isObject = require_isObject();
+    function isIterateeCall(value, index, object) {
+      if (!isObject(object)) {
+        return false;
+      }
+      var type = typeof index;
+      if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
+        return eq(object[index], value);
+      }
+      return false;
+    }
+    module2.exports = isIterateeCall;
+  }
+});
+
+// node_modules/lodash/slice.js
+var require_slice = __commonJS({
+  "node_modules/lodash/slice.js"(exports, module2) {
+    var baseSlice = require_baseSlice();
+    var isIterateeCall = require_isIterateeCall();
+    var toInteger2 = require_toInteger();
+    function slice2(array, start, end) {
+      var length = array == null ? 0 : array.length;
+      if (!length) {
+        return [];
+      }
+      if (end && typeof end != "number" && isIterateeCall(array, start, end)) {
+        start = 0;
+        end = length;
+      } else {
+        start = start == null ? 0 : toInteger2(start);
+        end = end === void 0 ? length : toInteger2(end);
+      }
+      return baseSlice(array, start, end);
+    }
+    module2.exports = slice2;
+  }
+});
+
 // node_modules/lodash/_stackClear.js
 var require_stackClear = __commonJS({
   "node_modules/lodash/_stackClear.js"(exports, module2) {
@@ -6288,20 +6371,6 @@ var require_baseTimes = __commonJS({
       return result;
     }
     module2.exports = baseTimes;
-  }
-});
-
-// node_modules/lodash/_isIndex.js
-var require_isIndex = __commonJS({
-  "node_modules/lodash/_isIndex.js"(exports, module2) {
-    var MAX_SAFE_INTEGER = 9007199254740991;
-    var reIsUint = /^(?:0|[1-9]\d*)$/;
-    function isIndex(value, length) {
-      var type = typeof value;
-      length = length == null ? MAX_SAFE_INTEGER : length;
-      return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
-    }
-    module2.exports = isIndex;
   }
 });
 
@@ -7607,30 +7676,6 @@ var require_readline_sync = __commonJS({
   }
 });
 
-// node_modules/lodash/_baseSlice.js
-var require_baseSlice = __commonJS({
-  "node_modules/lodash/_baseSlice.js"(exports, module2) {
-    function baseSlice(array, start, end) {
-      var index = -1, length = array.length;
-      if (start < 0) {
-        start = -start > length ? 0 : length + start;
-      }
-      end = end > length ? length : end;
-      if (end < 0) {
-        end += length;
-      }
-      length = start > end ? 0 : end - start >>> 0;
-      start >>>= 0;
-      var result = Array(length);
-      while (++index < length) {
-        result[index] = array[index + start];
-      }
-      return result;
-    }
-    module2.exports = baseSlice;
-  }
-});
-
 // node_modules/lodash/_castSlice.js
 var require_castSlice = __commonJS({
   "node_modules/lodash/_castSlice.js"(exports, module2) {
@@ -7820,27 +7865,6 @@ var require_trim = __commonJS({
       return castSlice(strSymbols, start, end).join("");
     }
     module2.exports = trim3;
-  }
-});
-
-// node_modules/lodash/_isIterateeCall.js
-var require_isIterateeCall = __commonJS({
-  "node_modules/lodash/_isIterateeCall.js"(exports, module2) {
-    var eq = require_eq();
-    var isArrayLike = require_isArrayLike();
-    var isIndex = require_isIndex();
-    var isObject = require_isObject();
-    function isIterateeCall(value, index, object) {
-      if (!isObject(object)) {
-        return false;
-      }
-      var type = typeof index;
-      if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
-        return eq(object[index], value);
-      }
-      return false;
-    }
-    module2.exports = isIterateeCall;
   }
 });
 
@@ -9527,13 +9551,15 @@ Yargs.Parser = Parser2;
 var yargs_default = Yargs;
 
 // src/functions/parseCliArgs.ts
+var import_slice = __toESM(require_slice());
 var parseCliArgs = () => {
   const argv = yargs_default(hideBin(process.argv)).version("1.0.0").option("role", {
     describe: "The role arn, e.g., arn:aws:iam::123456789:role/developer",
     type: "string"
   }).demandOption(["role"]).help().argv;
   const roleArn = (0, import_toString.default)((0, import_get.default)(argv, "role"));
-  const command = (0, import_join.default)((0, import_get.default)(argv, "_"), " ");
+  const restArgv = (0, import_slice.default)(process.argv, 4);
+  const command = (0, import_join.default)(restArgv, " ");
   return {
     command,
     roleArn
@@ -9767,6 +9793,7 @@ var main = () => {
     });
   }
   if (!(0, import_isEmpty.default)(command)) {
+    logInfo(`Executing command:`, command);
     (0, import_child_process8.execSync)(command, { stdio: "inherit" });
   } else {
     printAwsEnvVars();

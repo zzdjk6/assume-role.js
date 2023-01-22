@@ -3,6 +3,7 @@ import join from "lodash/join";
 import toString from "lodash/toString";
 import { hideBin } from "yargs/helpers";
 import yargs from "yargs/yargs";
+import slice from "lodash/slice";
 
 /**
  * Parse CLI arguments
@@ -18,7 +19,9 @@ export const parseCliArgs = () => {
     .help().argv;
 
   const roleArn = toString(get(argv, "role"));
-  const command = join(get(argv, "_"), " ");
+
+  const restArgv = slice(process.argv, 4);
+  const command = join(restArgv, " ");
 
   return {
     command,

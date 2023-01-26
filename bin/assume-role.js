@@ -9556,13 +9556,18 @@ var parseCliArgs = () => {
   const argv = yargs_default(hideBin(process.argv)).version("1.0.0").option("role", {
     describe: "The role arn, e.g., arn:aws:iam::123456789:role/developer",
     type: "string"
+  }).option("force-refresh", {
+    describe: "Force refresh session",
+    type: "boolean"
   }).demandOption(["role"]).help().argv;
   const roleArn = (0, import_toString.default)((0, import_get.default)(argv, "role"));
-  const restArgv = (0, import_slice.default)(process.argv, 4);
+  const forceRefresh = Boolean((0, import_get.default)(argv, "forceRefresh"));
+  const restArgv = (0, import_slice.default)(process.argv, forceRefresh ? 5 : 4);
   const command = (0, import_join.default)(restArgv, " ");
   return {
     command,
-    roleArn
+    roleArn,
+    forceRefresh
   };
 };
 
@@ -9763,11 +9768,11 @@ var updateAwsSessionEnv = (args) => {
 
 // src/main.ts
 var main = () => {
-  const { roleArn, command } = parseCliArgs();
+  const { roleArn, command, forceRefresh } = parseCliArgs();
   checkAwsCliVersion();
   const profileName = getAwsProfileName(roleArn);
   const profileData = getAwsProfileData(profileName);
-  if (isRoleSessionAlive(profileData.expiration)) {
+  if (!forceRefresh && isRoleSessionAlive(profileData.expiration)) {
     logInfo("Session still alive");
     updateAwsSessionEnv({
       accessKeyId: profileData.aws_access_key_id,

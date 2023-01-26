@@ -15,7 +15,7 @@ import { getIamUser } from "./functions/getIamUser";
 import { updateAwsSessionEnv } from "./functions/updateAwsSessionEnv";
 
 const main = () => {
-  const { roleArn, command } = parseCliArgs();
+  const { roleArn, command, forceRefresh } = parseCliArgs();
 
   checkAwsCliVersion();
 
@@ -23,7 +23,7 @@ const main = () => {
 
   const profileData = getAwsProfileData(profileName);
 
-  if (isRoleSessionAlive(profileData.expiration)) {
+  if (!forceRefresh && isRoleSessionAlive(profileData.expiration)) {
     logInfo("Session still alive");
 
     updateAwsSessionEnv({

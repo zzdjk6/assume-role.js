@@ -15,16 +15,22 @@ export const parseCliArgs = () => {
       describe: "The role arn, e.g., arn:aws:iam::123456789:role/developer",
       type: "string",
     })
+    .option("force-refresh", {
+      describe: "Force refresh session",
+      type: "boolean",
+    })
     .demandOption(["role"])
     .help().argv;
 
   const roleArn = toString(get(argv, "role"));
+  const forceRefresh = Boolean(get(argv, "forceRefresh"));
 
-  const restArgv = slice(process.argv, 4);
+  const restArgv = slice(process.argv, forceRefresh ? 5 : 4);
   const command = join(restArgv, " ");
 
   return {
     command,
     roleArn,
+    forceRefresh,
   };
 };

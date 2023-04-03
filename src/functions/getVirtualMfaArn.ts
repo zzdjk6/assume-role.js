@@ -12,7 +12,7 @@ import isEqual from "lodash/isEqual";
 export const getVirtualMfaArn = (userId: string) => {
   logInfo("Getting virtual MFA device...");
 
-  const output = execSync(`aws iam list-virtual-mfa-devices --no-paginate`, { encoding: "utf-8" });
+  const output = execSync(`aws iam list-virtual-mfa-devices --no-cli-pager`, { encoding: "utf-8" });
   const json = JSON.parse(output);
   const arr = get(json, "VirtualMFADevices");
   if (!Array.isArray(arr)) {

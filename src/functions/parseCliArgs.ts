@@ -10,7 +10,7 @@ import slice from "lodash/slice";
  */
 export const parseCliArgs = () => {
   const argv = yargs(hideBin(process.argv))
-    .version("1.0.0")
+    .version("1.1.1")
     .option("role", {
       describe: "The role arn, e.g., arn:aws:iam::123456789:role/developer",
       type: "string",

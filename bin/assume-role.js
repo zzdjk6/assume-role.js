@@ -9553,7 +9553,7 @@ var yargs_default = Yargs;
 // src/functions/parseCliArgs.ts
 var import_slice = __toESM(require_slice());
 var parseCliArgs = () => {
-  const argv = yargs_default(hideBin(process.argv)).version("1.0.0").option("role", {
+  const argv = yargs_default(hideBin(process.argv)).version("1.1.1").option("role", {
     describe: "The role arn, e.g., arn:aws:iam::123456789:role/developer",
     type: "string"
   }).option("force-refresh", {
@@ -9577,7 +9577,7 @@ var import_get2 = __toESM(require_get());
 var import_isEqual = __toESM(require_isEqual());
 var getVirtualMfaArn = (userId) => {
   logInfo("Getting virtual MFA device...");
-  const output = (0, import_child_process2.execSync)(`aws iam list-virtual-mfa-devices --no-paginate`, { encoding: "utf-8" });
+  const output = (0, import_child_process2.execSync)(`aws iam list-virtual-mfa-devices --no-cli-pager`, { encoding: "utf-8" });
   const json = JSON.parse(output);
   const arr = (0, import_get2.default)(json, "VirtualMFADevices");
   if (!Array.isArray(arr)) {
